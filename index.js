@@ -28,7 +28,9 @@ app.use(cors())
 var received_updates = [];
 const port = 4000
 
-
+app.get('/', async (req, res, next) => {
+    res.sendFile(__dirname + '/views/login/index.html');
+});
 
 
 app.listen(port, () => {
