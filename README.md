@@ -1,2 +1,2 @@
 # MusicLibraryManagementWebApp
-A Web Application to Consume the Music Library Management API
+An Express Web Application to Consume the Music Library Management API
