@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>Music Library Management | Login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	
+	<link rel="stylesheet" href="css/style.css">
+
+	</head>
+	<body>
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-12 col-lg-12">
+
+					<div>
+				      	<div class="d-flex">
+				      		<div>
+				      			<h3 class="mb-4">Welcome to the Music Library Management Dashboard</h3>
+				      		</div>			
+				      	</div>
+						<div class="signin-form">
+							<ul class="nav nav-tabs" role="tablist">
+							  <li class="nav-item" role="presentation">
+							    <a class="nav-link active" id="simple-tab-2" data-bs-toggle="tab" href="#genre" role="tab" aria-controls="simple-tabpanel-2" aria-selected="false">Genre</a>
+							  </li>
+
+							  <li class="nav-item" role="presentation">
+							    <a class="nav-link" id="simple-tab-0" data-bs-toggle="tab" href="#tracks" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Tracks</a>
+							  </li>
+							  <li class="nav-item" role="presentation">
+							    <a class="nav-link" id="simple-tab-1" data-bs-toggle="tab" href="#artists" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Artists</a>
+							  </li>
+							  <li class="nav-item" role="presentation">
+							    <a class="nav-link" id="simple-tab-2" data-bs-toggle="tab" href="#albums" role="tab" aria-controls="simple-tabpanel-2" aria-selected="false">Albums</a>
+							  </li>
+							</ul>
+
+							<div class="tab-content pt-5" id="tab-content">
+							 <!--  Genre Page -->
+							  <div class="tab-pane active" id="genre" role="tabpanel" aria-labelledby="genre">
+									<div class="card">
+										<div class="p-4 p-md-5">
+											<div class="row">
+							  					<div class="col-md-4">
+													<div class="d-flex">
+											      		<div class="w-100">
+											      			<h3 class="mb-4">Add Genre</h3>
+											      		</div>			
+										      		</div>
+								      
+
+											      	<div class="signin-form">
+														<h4 class="mb-4" id="log" style="color: red"></h4>
+											      		<div class="form-group mb-3">
+											      			<label class="label" for="name">Genre ID <span style="color: red">*</span></label>
+											      			<input type="text" class="form-control" placeholder="Genre ID" id="genre_id" required>
+											      		</div>
+
+											            <div class="form-group mb-3">
+											            	<label class="label" for="password">Genre Name <span style="color: red">*</span></label>
+											              <input type="password" class="form-control" placeholder="Genre Name"  id="password" required>
+											            </div>
+
+											            <div class="form-group">
+											            	<button type="button" class="form-control btn btn-primary rounded submit px-3" onclick="signIn()">Add</button>
+											            </div>
+								          			</div>
+								          		</div>
+
+								          		<div class="col-md-8">
+													<table class="table table-striped">
+													  <thead>
+													    <tr>
+													      <th scope="col">#</th>
+													      <th scope="col">Genre ID</th>
+													      <th scope="col">Genre Name</th>
+										
+													    </tr>
+													  </thead>
+													  <tbody>
+													    <tr>
+													      <th scope="row">1</th>
+													      <td>Mark</td>
+													      <td>Otto</td>
+													      <td><button class="btn-primary">Update</button></td>
+													      <td><button class="btn-primary">Delete</button></td>
+													    </tr>
+													   
+
+													  </tbody>
+													</table>
+								          		</div>
+								          	</div>
+					          			</div>
+						      		</div>
+
+							  </div>
+							   <!--  End Genre Page -->
+
+							  <!--  Tracks page -->
+							  <div class="tab-pane" id="tracks" role="tabpanel" aria-labelledby="tracks">
+							  	
+							  </div>
+							 <!--  End Tracks -->
+
+							  <!-- Artists Page -->
+							  <div class="tab-pane" id="artists" role="tabpanel" aria-labelledby="simple-tab-2">
+
+							  </div>
+							  <!-- End Artists Page -->
+
+							   <!-- Albums Page -->
+							  <div class="tab-pane" id="albums" role="tabpanel" aria-labelledby="simple-tab-2">
+
+							  </div>
+							  <!-- End Albums Page -->
+
+
+							</div>
+							
+		           
+		          		</div>
+		         
+		        		</div>
+		      		</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+
+<script>
+	function signIn(){
+		let username=$("#username").val()
+		let password=$("#password").val()
+
+		const jsondata={
+			username: username,
+			password: password
+		}
+		
+		sendPost(jsondata)
+
+	}
+
+	function sendPost(jsondata){
+		// Example of storing the JWT after login
+		fetch('http://localhost:3000/api/login', {
+		  mode: 'cors',
+		  method: 'POST',
+		  headers: { 'Content-Type': 'application/json'},
+		 	body: JSON.stringify(jsondata),
+		})
+		.then(response => response.json())
+		.then(data => {
+		  console.log(data)
+		  if (data.token) {
+		    localStorage.setItem('token', data.token);
+		  }
+		});
+	}
+
+
+</script>
+
+	</body>
+</html>
+
