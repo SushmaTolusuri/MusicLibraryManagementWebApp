@@ -51,7 +51,7 @@
 							    <a class="nav-link" id="simple-tab-1" data-bs-toggle="tab" href="#albums" onclick="readAlbums()" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Albums</a>
 							  </li>
 							  <li class="nav-item" role="presentation">
-							    <a class="nav-link" id="simple-tab-2" data-bs-toggle="tab" href="#tracks" role="tab" aria-controls="simple-tabpanel-2" aria-selected="false">Tracks</a>
+							    <a class="nav-link" id="simple-tab-2" data-bs-toggle="tab" href="#tracks" onclick="readTracks()" role="tab" aria-controls="simple-tabpanel-2" aria-selected="false">Tracks</a>
 							  </li>
 							</ul>
 
@@ -187,8 +187,8 @@
 														<h4 class="mb-4" id="log" style="color: red"></h4>
 											      		<div class="form-group mb-3">
 											      			<label class="label" for="name">Artist <span style="color: red">*</span></label>
-											      			<select class="form-control" id="artist_id">
-											      				<option value="">Artist</option>
+											      			<select class="form-control" id="artist_select">
+											      				<option value="">Select Artist</option>
 											      			</select>
 											      		</div>
 
@@ -256,21 +256,21 @@
 
 											            <div class="form-group mb-3">
 											            	<label class="label" for="password">Genre <span style="color: red">*</span></label>
-											              	<select class="form-control" id="genre_id">
+											              	<select class="form-control" id="genre_select">
 											              		<option value="">genre</option>
 											              	</select>
 											            </div>
 
 											            <div class="form-group mb-3">
 											            	<label class="label" for="password">Album <span style="color: red">*</span></label>
-											              	<select class="form-control" id="album_id">
+											              	<select class="form-control" id="album_select">
 											              		<option value="">Album</option>
 											              	</select>
 											            </div>
 
 
 											            <div class="form-group">
-											            	<button type="button" class="form-control btn btn-primary rounded submit px-3" onclick="signIn()">Add</button>
+											            	<button type="button" class="form-control btn btn-primary rounded submit px-3" onclick="createTrack()">Add</button>
 											            </div>
 								          			</div>
 								          		</div>
@@ -287,16 +287,7 @@
 										
 													    </tr>
 													  </thead>
-													  <tbody>
-													    <tr>
-													      <th scope="row">1</th>
-													      <td>Mark</td>
-													      <td>Otto</td>
-													      <td>Otto</td>
-													      <td>Otto</td>
-													      <td><button class="btn-primary">Update</button></td>
-													      <td><button class="btn-primary">Delete</button></td>
-													    </tr>
+													  <tbody id="tracktable">
 													   
 
 													  </tbody>
@@ -413,6 +404,43 @@
 							<!--  End Update Artist Modal -->
 
 
+								<!--  Update Album Modal -->
+							<div class="modal" tabindex="-1" role="dialog" id="updatetrack">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+									    <div class="modal-header">
+									        <h5 class="modal-title">Update A Track</h5>
+									        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									          <span aria-hidden="true">&times;</span>
+									        </button>
+									    </div>
+									    <div class="modal-body">
+									        <div class="form-group mb-3">
+											    <label class="label" for="name">Data ID <span style="color: red">*</span></label>
+											    <input type="text" class="form-control" placeholder="Track ID" id="track_id_modal" required>
+											</div>
+
+											<div class="form-group mb-3">
+											    <label class="label" for="name">Track Name <span style="color: red">*</span></label>
+											    <input type="text" class="form-control" placeholder="Album Name" id="track_name_modal" required>
+											</div>
+
+											<div class="form-group mb-3">
+											    <label class="label" for="name">Track Length <span style="color: red">*</span></label>
+											    <input type="text" class="form-control" placeholder="Track Length" id="track_length_modal" required>
+											</div>
+
+									    </div>
+									    <div class="modal-footer">
+									        <button type="button" class="btn btn-primary" onclick="updateTrack()">Save changes</button>
+									        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeTrackModal()">Close</button>
+									    </div>
+									</div>
+								</div>
+							</div>
+							<!--  End Update Artist Modal -->
+
+
 							 
 
 							</div>
@@ -456,10 +484,12 @@
 		});
 	}
 
-	function readGenres(){
+	async function readGenres(){
+		var genreData=""
+
 		const token = localStorage.getItem('token');
 		// Example of storing the JWT after login
-		fetch('http://localhost:3000/api/admin/readgenres', {
+		await fetch('http://localhost:3000/api/admin/readgenres', {
 		  mode: 'cors',
 		  method: 'GET',
 		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`}
@@ -487,6 +517,7 @@
 			});
 			$("#genretable").html(rows)
 		});
+		return genreData
 	}
 
 	function loadgenremodal(genreid){
@@ -574,10 +605,12 @@
 		});
 	}
 
-	function readArtists(){
+	async function readArtists(){
+		var artistsData=""
+
 		const token = localStorage.getItem('token');
 		// Example of storing the JWT after login
-		fetch('http://localhost:3000/api/admin/readartists', {
+		await fetch('http://localhost:3000/api/admin/readartists', {
 		  mode: 'cors',
 		  method: 'GET',
 		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`}
@@ -587,6 +620,8 @@
 			return response.json()
 		})
 		.then(data => {
+			artistsData=data
+
 			var rows="";
 		  	data.forEach(function(element, index) {
 		  		var tr="<tr>"
@@ -600,6 +635,8 @@
 			});
 			$("#artisttable").html(rows)
 		});
+		console.log(artistsData)
+		return artistsData;
 	}
 
 	function loadartistmodal(genreid){
@@ -660,14 +697,14 @@
 	// Album Management API Calls
 	function createAlbum(){
 		const token = localStorage.getItem('token');
-		var album_id=$("#album_id").val()
+		var artist_id=$("#artist_select").val()
 		var name=$("#album_name").val()
 		// Example of storing the JWT after login
 		fetch('http://localhost:3000/api/admin/createalbum', {
 		  mode: 'cors',
 		  method: 'POST',
 		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
-		  body: JSON.stringify({album_id:album_id,name:name})
+		  body: JSON.stringify({artist_id:artist_id,name:name})
 		})
 		.then(response => {
 			console.log(response)
@@ -681,37 +718,60 @@
 		});
 	}
 
-	function readAlbums(){
+	async function readAlbums(){
+		let albumData=""
+		let artistData=""
+
 		const token = localStorage.getItem('token');
-		// Example of storing the JWT after login
-		fetch('http://localhost:3000/api/admin/readalbums', {
-		  mode: 'cors',
-		  method: 'GET',
-		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`}
-		})
-		.then(response => {
-			console.log(response)
-			return response.json()
-		})
-		.then(data => {
-			genreData=data
-			var rows="";
-		  	data.forEach(function(element, index) {
-		  		// Update the Table on genre page
-		  		var tr="<tr>"
-		  		tr+=`<td>${index}</td>`
-		  		tr+=`<td>${element.album_id}</td>`
-		  		tr+=`<td>${element.name}</td>`
-		  		tr+=`<td><buton class="btn btn-success" data-id="${element._id}" onclick="loadgenremodal(\'${element._id}\')">Update</button></td>`
-		  		tr+=`<td><buton class="btn btn-warning" data-id="${element._id}" onclick="deleteGenre(\'${element._id}\')">Delete</button></td>`
-		  		tr+="</tr>"
-		  		rows+=tr
 
-		  		// Update the Select on the artists pages
-
-			});
-			$("#albumtable").html(rows)
+		await readArtists().then(artist=> {
+			artistData=artist
+			console.log(artistData)
 		});
+
+		await fetch('http://localhost:3000/api/admin/readalbums', {
+			  mode: 'cors',
+			  method: 'GET',
+			  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`}
+			})
+			.then(response => {
+				console.log(response)
+				return response.json()
+			})
+			.then(data => {
+				albumData=data
+
+				let options=`<option value="">Select Artist</option>`
+
+				var rows="";
+			  	data.forEach(function(element, index) {
+			  		// Update the Table on genre page
+			  		var tr="<tr>"
+			  		tr+=`<td>${index}</td>`
+					var artist_name="";
+			  		// search the artists name from artists data
+			  		artistData.forEach(function(elem, ind) {
+			  			options+=`<option value="${elem.artist_id}">${elem.name}</option>`
+			  			if(elem.artist_id==element.artist_id){
+							artist_name=elem.name
+			  			}
+			  		});
+
+
+			  		tr+=`<td>${artist_name}</td>`
+			  		tr+=`<td>${element.name}</td>`
+			  		tr+=`<td><buton class="btn btn-success" data-id="${element._id}" onclick="loadalbummodal(\'${element._id}\')">Update</button></td>`
+			  		tr+=`<td><buton class="btn btn-warning" data-id="${element._id}" onclick="deleteAlbum(\'${element._id}\')">Delete</button></td>`
+			  		tr+="</tr>"
+			  		rows+=tr
+
+			  		// Update the Select on the artists pages
+
+				});
+				$("#albumtable").html(rows)
+				$("#artist_select").html(options)
+			});
+		return albumData
 	}
 
 	function loadalbummodal(albumid){
@@ -734,7 +794,7 @@
 		  mode: 'cors',
 		  method: 'PUT',
 		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
-		  body: JSON.stringify({genre_id:genre_id,name:name})
+		  body: JSON.stringify({id:album_id,name:name})
 		})
 		.then(response => {
 			console.log(response)
@@ -754,7 +814,7 @@
 		  mode: 'cors',
 		  method: 'POST',
 		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
-		  body: JSON.stringify({album_id:album_id})
+		  body: JSON.stringify({id:album_id})
 		})
 		.then(response => {
 			console.log(response)
@@ -764,6 +824,159 @@
 			console.log(data)
 			location.href = "/dashboard";
 			$("#log").html("Album Deleted Successfully")
+		});
+	}
+	// End Album Management API Calls
+
+
+	// Track Management API Calls
+	function createTrack(){
+		const token = localStorage.getItem('token');
+		var name=$("#track_name").val()
+		var length=$("#track_length").val()
+		var genre_id=$("#genre_select").val()
+		var album_id=$("#album_select").val()
+		// Example of storing the JWT after login
+		fetch('http://localhost:3000/api/admin/createtrack', {
+		  mode: 'cors',
+		  method: 'POST',
+		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
+		  body: JSON.stringify({name:name,length:length,genre_id:genre_id,album_id:album_id})
+		})
+		.then(response => {
+			console.log(response)
+			return response.json()
+		})
+		.then(data => {
+			console.log(data)
+			location.href = "/dashboard";
+			$("#log").html("Track Created Successfully")
+
+		});
+	}
+
+	async function readTracks(){
+		var albumData=""
+		var genreData=""
+
+		const token = localStorage.getItem('token');
+
+		await readAlbums().then(albums=> {
+				albumData=albums
+		});
+
+		await readGenres().then(genres=> {
+				genreData=genres
+		});
+			
+		await fetch('http://localhost:3000/api/admin/readtracks', {
+			  mode: 'cors',
+			  method: 'GET',
+			  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`}
+			})
+			.then(response => {
+				console.log(response)
+				return response.json()
+			})
+			.then(data => {
+				let genreOptions=`<option value="">Select Genre</option>`
+				let albumOptions=`<option value="">Select Album</option>`
+
+				var rows="";
+			  	data.forEach(function(element, index) {
+			  		// Update the Table on genre page
+			  		var tr="<tr>"
+			  		tr+=`<td>${index}</td>`
+					var album_name="";
+					var genre_name="";
+
+			  		// search genre and update genre select
+			  		genreData.forEach(function(elem, ind) {
+			  			genreOptions+=`<option value="${elem.genre_id}">${elem.name}</option>`
+			  			if(elem.genre_id==element.genre_id){
+							genre_name=elem.name
+			  			}
+			  		});
+
+			  		// search album and update album select
+			  		albumData.forEach(function(ele, inde) {
+			  			albumOptions+=`<option value="${ele.album_id}">${ele.name}</option>`
+			  			if(ele.album_id==element.album_id){
+							album_name=ele.name
+			  			}
+			  		});
+
+
+			  		tr+=`<td>${element.name}</td>`
+			  		tr+=`<td>${element.length}</td>`
+			  		tr+=`<td>${genre_name}</td>`
+			  		tr+=`<td>${album_name}</td>`
+			  		tr+=`<td><buton class="btn btn-success" data-id="${element._id}" onclick="loadtrackmodal(\'${element._id}\')">Update</button></td>`
+			  		tr+=`<td><buton class="btn btn-warning" data-id="${element._id}" onclick="deleteTrack(\'${element._id}\')">Delete</button></td>`
+			  		tr+="</tr>"
+			  		rows+=tr
+
+			  		// Update the Select on the artists pages
+
+				});
+				$("#tracktable").html(rows)
+				$("#genre_select").html(genreOptions)
+				$("#album_select").html(albumOptions)
+			});
+
+	}
+
+	function loadtrackmodal(trackid){
+		$('#track_id_modal').val(trackid);
+		$('#updatetrack').modal('show');
+
+	}
+
+	function closeTrackModal(){
+		$('#updatetrack').modal('hide');
+	}
+
+	function updateTrack(){
+		const token = localStorage.getItem('token');
+		var track_id=$("#track_id_modal").val()
+		var name=$("#track_name_modal").val()
+		var length=$("#track_length_modal").val()
+		
+		// Example of storing the JWT after login
+		fetch('http://localhost:3000/api/admin/updatetrack', {
+		  mode: 'cors',
+		  method: 'PUT',
+		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
+		  body: JSON.stringify({id:track_id,name:name,length:length})
+		})
+		.then(response => {
+			console.log(response)
+			return response.json()
+		})
+		.then(data => {
+			console.log(data)
+			location.href = "/dashboard";
+			$("#log").html("Track Updated Successfully")
+		});
+	}
+
+	function deleteTrack(track_id){
+		const token = localStorage.getItem('token');
+		// Example of storing the JWT after login
+		fetch('http://localhost:3000/api/admin/deletealbum', {
+		  mode: 'cors',
+		  method: 'POST',
+		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
+		  body: JSON.stringify({id:track_id})
+		})
+		.then(response => {
+			console.log(response)
+			return response.json()
+		})
+		.then(data => {
+			console.log(data)
+			location.href = "/dashboard";
+			$("#log").html("Track Deleted Successfully")
 		});
 	}
 	// End Album Management API Calls
