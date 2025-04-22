@@ -48,7 +48,7 @@
 							    <a class="nav-link" id="simple-tab-0" data-bs-toggle="tab" href="#artists" onclick="readArtists()" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Artists</a>
 							  </li>
 							  <li class="nav-item" role="presentation">
-							    <a class="nav-link" id="simple-tab-1" data-bs-toggle="tab" href="#albums" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Albums</a>
+							    <a class="nav-link" id="simple-tab-1" data-bs-toggle="tab" href="#albums" onclick="readAlbums()" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Albums</a>
 							  </li>
 							  <li class="nav-item" role="presentation">
 							    <a class="nav-link" id="simple-tab-2" data-bs-toggle="tab" href="#tracks" role="tab" aria-controls="simple-tabpanel-2" aria-selected="false">Tracks</a>
@@ -199,7 +199,7 @@
 
 
 											            <div class="form-group">
-											            	<button type="button" class="form-control btn btn-primary rounded submit px-3" onclick="signIn()">Add</button>
+											            	<button type="button" class="form-control btn btn-primary rounded submit px-3" onclick="createAlbum()">Add</button>
 											            </div>
 								          			</div>
 								          		</div>
@@ -214,14 +214,8 @@
 										
 													    </tr>
 													  </thead>
-													  <tbody>
-													    <tr>
-													      <th scope="row">1</th>
-													      <td>Mark</td>
-													      <td>Otto</td>
-													      <td><button class="btn-primary">Update</button></td>
-													      <td><button class="btn-primary">Delete</button></td>
-													    </tr>
+													  <tbody id="albumtable">
+													    
 													   
 
 													  </tbody>
@@ -387,6 +381,38 @@
 							<!--  End Update Artist Modal -->
 
 
+							<!--  Update Album Modal -->
+							<div class="modal" tabindex="-1" role="dialog" id="updatealbum">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+									    <div class="modal-header">
+									        <h5 class="modal-title">Update An Album</h5>
+									        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									          <span aria-hidden="true">&times;</span>
+									        </button>
+									    </div>
+									    <div class="modal-body">
+									        <div class="form-group mb-3">
+											    <label class="label" for="name">Data ID <span style="color: red">*</span></label>
+											    <input type="text" class="form-control" placeholder="Album ID" id="album_id_modal" required>
+											</div>
+
+											<div class="form-group mb-3">
+											    <label class="label" for="name">Name <span style="color: red">*</span></label>
+											    <input type="text" class="form-control" placeholder="Album Name" id="album_name_modal" required>
+											</div>
+
+									    </div>
+									    <div class="modal-footer">
+									        <button type="button" class="btn btn-primary" onclick="updateAlbum()">Save changes</button>
+									        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeAlbumModal()">Close</button>
+									    </div>
+									</div>
+								</div>
+							</div>
+							<!--  End Update Artist Modal -->
+
+
 							 
 
 							</div>
@@ -479,7 +505,7 @@
 		var name=$("#genre_name_modal").val()
 		
 		// Example of storing the JWT after login
-		fetch('http://localhost:3000/api/admin/deletegenre', {
+		fetch('http://localhost:3000/api/admin/updategenre', {
 		  mode: 'cors',
 		  method: 'PUT',
 		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
@@ -630,6 +656,118 @@
 			$("#log").html("Genre Deleted Successfully")
 		});
 	}
+
+	// Album Management API Calls
+	function createAlbum(){
+		const token = localStorage.getItem('token');
+		var album_id=$("#album_id").val()
+		var name=$("#album_name").val()
+		// Example of storing the JWT after login
+		fetch('http://localhost:3000/api/admin/createalbum', {
+		  mode: 'cors',
+		  method: 'POST',
+		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
+		  body: JSON.stringify({album_id:album_id,name:name})
+		})
+		.then(response => {
+			console.log(response)
+			return response.json()
+		})
+		.then(data => {
+			console.log(data)
+			location.href = "/dashboard";
+			$("#log").html("Album Created Successfully")
+
+		});
+	}
+
+	function readAlbums(){
+		const token = localStorage.getItem('token');
+		// Example of storing the JWT after login
+		fetch('http://localhost:3000/api/admin/readalbums', {
+		  mode: 'cors',
+		  method: 'GET',
+		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`}
+		})
+		.then(response => {
+			console.log(response)
+			return response.json()
+		})
+		.then(data => {
+			genreData=data
+			var rows="";
+		  	data.forEach(function(element, index) {
+		  		// Update the Table on genre page
+		  		var tr="<tr>"
+		  		tr+=`<td>${index}</td>`
+		  		tr+=`<td>${element.album_id}</td>`
+		  		tr+=`<td>${element.name}</td>`
+		  		tr+=`<td><buton class="btn btn-success" data-id="${element._id}" onclick="loadgenremodal(\'${element._id}\')">Update</button></td>`
+		  		tr+=`<td><buton class="btn btn-warning" data-id="${element._id}" onclick="deleteGenre(\'${element._id}\')">Delete</button></td>`
+		  		tr+="</tr>"
+		  		rows+=tr
+
+		  		// Update the Select on the artists pages
+
+			});
+			$("#albumtable").html(rows)
+		});
+	}
+
+	function loadalbummodal(albumid){
+		$('#album_id_modal').val(albumid);
+		$('#updatealbum').modal('show');
+
+	}
+
+	function closeAlbumModal(){
+		$('#updatealbum').modal('hide');
+	}
+
+	function updateAlbum(){
+		const token = localStorage.getItem('token');
+		var album_id=$("#album_id_modal").val()
+		var name=$("#album_name_modal").val()
+		
+		// Example of storing the JWT after login
+		fetch('http://localhost:3000/api/admin/updatealbum', {
+		  mode: 'cors',
+		  method: 'PUT',
+		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
+		  body: JSON.stringify({genre_id:genre_id,name:name})
+		})
+		.then(response => {
+			console.log(response)
+			return response.json()
+		})
+		.then(data => {
+			console.log(data)
+			location.href = "/dashboard";
+			$("#log").html("Album Updated Successfully")
+		});
+	}
+
+	function deleteAlbum(album_id){
+		const token = localStorage.getItem('token');
+		// Example of storing the JWT after login
+		fetch('http://localhost:3000/api/admin/deletealbum', {
+		  mode: 'cors',
+		  method: 'POST',
+		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
+		  body: JSON.stringify({album_id:album_id})
+		})
+		.then(response => {
+			console.log(response)
+			return response.json()
+		})
+		.then(data => {
+			console.log(data)
+			location.href = "/dashboard";
+			$("#log").html("Album Deleted Successfully")
+		});
+	}
+	// End Album Management API Calls
+
 
 
 
