@@ -362,7 +362,6 @@
 
 		});
 	}
-	
 
 	function readGenres(){
 		const token = localStorage.getItem('token');
@@ -383,13 +382,36 @@
 		  		tr+=`<td>${index}</td>`
 		  		tr+=`<td>${element.genre_id}</td>`
 		  		tr+=`<td>${element.name}</td>`
+		  		tr+=`<td><buton class="btn btn-warning" data-id="${element._id}" onclick="deleteGenre(\'${element.genre_id}\')">Delete</button></td>`
 		  		tr+="</tr>"
 		  		rows+=tr
 			});
 			$("#genretable").html(rows)
 		});
 	}
-	
+
+	function deleteGenre(genre_id){
+		const token = localStorage.getItem('token');
+		alert(genre_id)
+		// Example of storing the JWT after login
+		fetch('http://localhost:3000/api/admin/deletegenre', {
+		  mode: 'cors',
+		  method: 'POST',
+		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
+		  body: JSON.stringify({genre_id:genre_id})
+		})
+		.then(response => {
+			console.log(response)
+			return response.json()
+		})
+		.then(data => {
+			console.log(data)
+			location.href = "/dashboard";
+			$("#log").html("Genre Deleted Successfully")
+		});
+	}
+
+
 	// get the genres through the ap/admin/readgenres endpoint
 	readGenres();
 
