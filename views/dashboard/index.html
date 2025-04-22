@@ -32,13 +32,13 @@
 							  </li>
 
 							  <li class="nav-item" role="presentation">
-							    <a class="nav-link" id="simple-tab-0" data-bs-toggle="tab" href="#tracks" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Tracks</a>
+							    <a class="nav-link" id="simple-tab-0" data-bs-toggle="tab" href="#artists" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Artists</a>
 							  </li>
 							  <li class="nav-item" role="presentation">
-							    <a class="nav-link" id="simple-tab-1" data-bs-toggle="tab" href="#artists" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Artists</a>
+							    <a class="nav-link" id="simple-tab-1" data-bs-toggle="tab" href="#albums" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Albums</a>
 							  </li>
 							  <li class="nav-item" role="presentation">
-							    <a class="nav-link" id="simple-tab-2" data-bs-toggle="tab" href="#albums" role="tab" aria-controls="simple-tabpanel-2" aria-selected="false">Albums</a>
+							    <a class="nav-link" id="simple-tab-2" data-bs-toggle="tab" href="#tracks" role="tab" aria-controls="simple-tabpanel-2" aria-selected="false">Tracks</a>
 							  </li>
 							</ul>
 
@@ -59,13 +59,13 @@
 											      	<div class="signin-form">
 														<h4 class="mb-4" id="log" style="color: red"></h4>
 											      		<div class="form-group mb-3">
-											      			<label class="label" for="name">Genre ID <span style="color: red">*</span></label>
+											      			<label class="label" for="genre_id">Genre ID <span style="color: red">*</span></label>
 											      			<input type="text" class="form-control" placeholder="Genre ID" id="genre_id" required>
 											      		</div>
 
 											            <div class="form-group mb-3">
-											            	<label class="label" for="password">Genre Name <span style="color: red">*</span></label>
-											              <input type="password" class="form-control" placeholder="Genre Name"  id="password" required>
+											            	<label class="label" for="name">Genre Name <span style="color: red">*</span></label>
+											              <input type="text" class="form-control" placeholder="Genre Name"  id="name" required>
 											            </div>
 
 											            <div class="form-group">
@@ -104,24 +104,220 @@
 							  </div>
 							   <!--  End Genre Page -->
 
+							    <!-- Artists Page -->
+							  <div class="tab-pane" id="artists" role="tabpanel" aria-labelledby="simple-tab-2">
+									<div class="card">
+										<div class="p-4 p-md-5">
+											<div class="row">
+							  					<div class="col-md-4">
+													<div class="d-flex">
+											      		<div class="w-100">
+											      			<h3 class="mb-4">Add Artist</h3>
+											      		</div>			
+										      		</div>
+								      
+
+											      	<div class="signin-form">
+														<h4 class="mb-4" id="log" style="color: red"></h4>
+											      		<div class="form-group mb-3">
+											      			<label class="label" for="name">Artist ID <span style="color: red">*</span></label>
+											      			<input type="text" class="form-control" placeholder="Artist ID" id="artist_id" required>
+											      		</div>
+
+											            <div class="form-group mb-3">
+											            	<label class="label" for="password">Artist Name <span style="color: red">*</span></label>
+											              <input type="text" class="form-control" placeholder="Artist Name"  id="name" required>
+											            </div>
+
+											             <div class="form-group mb-3">
+											            	<label class="label" for="password">Country <span style="color: red">*</span></label>
+											              <input type="text" class="form-control" placeholder="Country"  id="country" required>
+											            </div>
+
+											            <div class="form-group">
+											            	<button type="button" class="form-control btn btn-primary rounded submit px-3" onclick="signIn()">Add</button>
+											            </div>
+								          			</div>
+								          		</div>
+
+								          		<div class="col-md-8">
+													<table class="table table-striped">
+													  <thead>
+													    <tr>
+													      <th scope="col">#</th>
+													      <th scope="col">Artist ID</th>
+													      <th scope="col">Artist Name</th>
+													      <th scope="col">Country</th>
+										
+													    </tr>
+													  </thead>
+													  <tbody>
+													    <tr>
+													      <th scope="row">1</th>
+													      <td>Mark</td>
+													      <td>Otto</td>
+													      <td>Otto</td>
+													      <td><button class="btn-primary">Update</button></td>
+													      <td><button class="btn-primary">Delete</button></td>
+													    </tr>
+													   
+
+													  </tbody>
+													</table>
+								          		</div>
+								          	</div>
+					          			</div>
+						      		</div>
+							  </div>
+							  <!-- End Artists Page -->
+
+							    <!-- Albums Page -->
+							  <div class="tab-pane" id="albums" role="tabpanel" aria-labelledby="simple-tab-2">
+							  	<div class="card">
+										<div class="p-4 p-md-5">
+											<div class="row">
+							  					<div class="col-md-4">
+													<div class="d-flex">
+											      		<div class="w-100">
+											      			<h3 class="mb-4">Add Album</h3>
+											      		</div>			
+										      		</div>
+								      
+
+											      	<div class="signin-form">
+														<h4 class="mb-4" id="log" style="color: red"></h4>
+											      		<div class="form-group mb-3">
+											      			<label class="label" for="name">Artist <span style="color: red">*</span></label>
+											      			<select class="form-control" id="artist_id">
+											      				<option value="">Artist</option>
+											      			</select>
+											      		</div>
+
+											            <div class="form-group mb-3">
+											            	<label class="label" for="password">Album Name <span style="color: red">*</span></label>
+											              <input type="text" class="form-control" placeholder="Album Name"  id="name" required>
+											            </div>
+
+
+											            <div class="form-group">
+											            	<button type="button" class="form-control btn btn-primary rounded submit px-3" onclick="signIn()">Add</button>
+											            </div>
+								          			</div>
+								          		</div>
+
+								          		<div class="col-md-8">
+													<table class="table table-striped">
+													  <thead>
+													    <tr>
+													      <th scope="col">#</th>
+													      <th scope="col">Artist Name</th>
+													      <th scope="col">Album Name</th>
+										
+													    </tr>
+													  </thead>
+													  <tbody>
+													    <tr>
+													      <th scope="row">1</th>
+													      <td>Mark</td>
+													      <td>Otto</td>
+													      <td><button class="btn-primary">Update</button></td>
+													      <td><button class="btn-primary">Delete</button></td>
+													    </tr>
+													   
+
+													  </tbody>
+													</table>
+								          		</div>
+								          	</div>
+					          			</div>
+						      		</div>
+							  </div>
+							  <!-- End Albums Page -->
+
+
 							  <!--  Tracks page -->
 							  <div class="tab-pane" id="tracks" role="tabpanel" aria-labelledby="tracks">
+							  	<div class="card">
+										<div class="p-4 p-md-5">
+											<div class="row">
+							  					<div class="col-md-4">
+													<div class="d-flex">
+											      		<div class="w-100">
+											      			<h3 class="mb-4">Add Track</h3>
+											      		</div>			
+										      		</div>
+								      
+
+											      	<div class="signin-form">
+														<h4 class="mb-4" id="log" style="color: red"></h4>
+											      		<div class="form-group mb-3">
+											      			<label class="label" for="name">Track Name <span style="color: red">*</span></label>
+											      			<input type="text" class="form-control" placeholder="Track Name" id="name" required>
+											      		</div>
+
+											            <div class="form-group mb-3">
+											            	<label class="label" for="password">Track Length<span style="color: red">*</span></label>
+											              <input type="text" class="form-control" placeholder="Track Length"  id="length" required>
+											            </div>
+
+											            <div class="form-group mb-3">
+											            	<label class="label" for="password">Genre <span style="color: red">*</span></label>
+											              	<select class="form-control" id="genre_id">
+											              		<option value="">genre</option>
+											              	</select>
+											            </div>
+
+											            <div class="form-group mb-3">
+											            	<label class="label" for="password">Album <span style="color: red">*</span></label>
+											              	<select class="form-control" id="album_id">
+											              		<option value="">Album</option>
+											              	</select>
+											            </div>
+
+
+											            <div class="form-group">
+											            	<button type="button" class="form-control btn btn-primary rounded submit px-3" onclick="signIn()">Add</button>
+											            </div>
+								          			</div>
+								          		</div>
+
+								          		<div class="col-md-8">
+													<table class="table table-striped">
+													  <thead>
+													    <tr>
+													      <th scope="col">#</th>
+													      <th scope="col">Track Name</th>
+													      <th scope="col">Track Length</th>
+													      <th scope="col">Genre</th>
+													      <th scope="col">Album</th>
+										
+													    </tr>
+													  </thead>
+													  <tbody>
+													    <tr>
+													      <th scope="row">1</th>
+													      <td>Mark</td>
+													      <td>Otto</td>
+													      <td>Otto</td>
+													      <td>Otto</td>
+													      <td><button class="btn-primary">Update</button></td>
+													      <td><button class="btn-primary">Delete</button></td>
+													    </tr>
+													   
+
+													  </tbody>
+													</table>
+								          		</div>
+								          	</div>
+					          			</div>
+						      		</div>
 							  	
 							  </div>
 							 <!--  End Tracks -->
 
-							  <!-- Artists Page -->
-							  <div class="tab-pane" id="artists" role="tabpanel" aria-labelledby="simple-tab-2">
+							 
 
-							  </div>
-							  <!-- End Artists Page -->
-
-							   <!-- Albums Page -->
-							  <div class="tab-pane" id="albums" role="tabpanel" aria-labelledby="simple-tab-2">
-
-							  </div>
-							  <!-- End Albums Page -->
-
+							 
 
 							</div>
 							
