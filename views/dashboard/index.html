@@ -439,7 +439,7 @@
 		// Example of storing the JWT after login
 		fetch('http://localhost:3000/api/admin/deletegenre', {
 		  mode: 'cors',
-		  method: 'POST',
+		  method: 'PUT',
 		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
 		  body: JSON.stringify({genre_id:genre_id,name:name})
 		})
