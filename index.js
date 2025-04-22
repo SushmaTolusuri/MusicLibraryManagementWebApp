@@ -32,7 +32,9 @@ app.get('/', async (req, res, next) => {
     res.sendFile(__dirname + '/views/login/index.html');
 });
 
-
+app.get('/', async (req, res, next) => {
+    res.sendFile(__dirname + '/views/dashboard/index.html');
+});
 
 
 app.listen(port, () => {
