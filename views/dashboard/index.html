@@ -82,7 +82,7 @@
 											            </div>
 
 											            <div class="form-group">
-											            	<button type="button" class="form-control btn btn-primary rounded submit px-3" onclick="signIn()">Add</button>
+											            	<button type="button" class="form-control btn btn-primary rounded submit px-3" onclick="createGenre()">Add</button>
 											            </div>
 								          			</div>
 								          		</div>
@@ -340,6 +340,28 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 
 <script>
+	function createGenre(){
+		const token = localStorage.getItem('token');
+		var genre_id=$("#genre_id").val()
+		var name=$("#name").val()
+		// Example of storing the JWT after login
+		fetch('http://localhost:3000/api/admin/creategenre', {
+		  mode: 'cors',
+		  method: 'POST',
+		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
+		  body: JSON.stringify({genre_id:genre_id,name:name})
+		})
+		.then(response => {
+			console.log(response)
+			return response.json()
+		})
+		.then(data => {
+			console.log(data)
+			location.href = "/dashboard";
+			$("#log").html("Genre Created Successfully")
+
+		});
+	}
 	
 
 	function readGenres(){
