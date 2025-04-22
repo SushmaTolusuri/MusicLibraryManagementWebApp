@@ -12,6 +12,19 @@
 	
 	<link rel="stylesheet" href="css/style.css">
 
+	<script type="text/javascript">
+		function checkAuth(){
+			const token = localStorage.getItem('token');
+			if(!token){
+				location.href = "/";
+			}
+		}
+		// check that we have a JWT Token 
+		// if no token is available prompt for login
+		checkAuth()
+	</script>
+
+
 	</head>
 	<body>
 	<section class="ftco-section">
@@ -84,16 +97,8 @@
 										
 													    </tr>
 													  </thead>
-													  <tbody>
-													    <tr>
-													      <th scope="row">1</th>
-													      <td>Mark</td>
-													      <td>Otto</td>
-													      <td><button class="btn-primary">Update</button></td>
-													      <td><button class="btn-primary">Delete</button></td>
-													    </tr>
-													   
-
+													  <tbody id="genretable">
+													    
 													  </tbody>
 													</table>
 								          		</div>
@@ -335,35 +340,36 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 
 <script>
-	function signIn(){
-		let username=$("#username").val()
-		let password=$("#password").val()
+	
 
-		const jsondata={
-			username: username,
-			password: password
-		}
-		
-		sendPost(jsondata)
-
-	}
-
-	function sendPost(jsondata){
+	function readGenres(){
+		const token = localStorage.getItem('token');
 		// Example of storing the JWT after login
-		fetch('http://localhost:3000/api/login', {
+		fetch('http://localhost:3000/api/admin/readgenres', {
 		  mode: 'cors',
-		  method: 'POST',
-		  headers: { 'Content-Type': 'application/json'},
-		 	body: JSON.stringify(jsondata),
+		  method: 'GET',
+		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`}
 		})
-		.then(response => response.json())
+		.then(response => {
+			console.log(response)
+			return response.json()
+		})
 		.then(data => {
-		  console.log(data)
-		  if (data.token) {
-		    localStorage.setItem('token', data.token);
-		  }
+			var rows="";
+		  	data.forEach(function(element, index) {
+		  		var tr="<tr>"
+		  		tr+=`<td>${index}</td>`
+		  		tr+=`<td>${element.genre_id}</td>`
+		  		tr+=`<td>${element.name}</td>`
+		  		tr+="</tr>"
+		  		rows+=tr
+			});
+			$("#genretable").html(rows)
 		});
 	}
+	
+	// get the genres through the ap/admin/readgenres endpoint
+	readGenres();
 
 
 </script>

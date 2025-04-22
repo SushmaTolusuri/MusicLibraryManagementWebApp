@@ -23,7 +23,13 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
-app.use(cors())
+
+app.use(cors({
+    credentials: true,
+    preflightContinue: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH' , 'DELETE', 'OPTIONS'],
+    origin: true
+}));
 
 var received_updates = [];
 const port = 4000
