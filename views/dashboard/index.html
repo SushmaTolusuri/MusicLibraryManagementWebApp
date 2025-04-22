@@ -45,7 +45,7 @@
 							  </li>
 
 							  <li class="nav-item" role="presentation">
-							    <a class="nav-link" id="simple-tab-0" data-bs-toggle="tab" href="#artists" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Artists</a>
+							    <a class="nav-link" id="simple-tab-0" data-bs-toggle="tab" href="#artists" onclick="readArtists()" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Artists</a>
 							  </li>
 							  <li class="nav-item" role="presentation">
 							    <a class="nav-link" id="simple-tab-1" data-bs-toggle="tab" href="#albums" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Albums</a>
@@ -141,7 +141,7 @@
 											            </div>
 
 											            <div class="form-group">
-											            	<button type="button" class="form-control btn btn-primary rounded submit px-3" onclick="signIn()">Add</button>
+											            	<button type="button" class="form-control btn btn-primary rounded submit px-3" onclick="createArtist()">Add</button>
 											            </div>
 								          			</div>
 								          		</div>
@@ -157,15 +157,8 @@
 										
 													    </tr>
 													  </thead>
-													  <tbody>
-													    <tr>
-													      <th scope="row">1</th>
-													      <td>Mark</td>
-													      <td>Otto</td>
-													      <td>Otto</td>
-													      <td><button class="btn-primary">Update</button></td>
-													      <td><button class="btn-primary">Delete</button></td>
-													    </tr>
+													  <tbody id="artisttable">
+													   
 													   
 
 													  </tbody>
@@ -336,7 +329,7 @@
 									    </div>
 									    <div class="modal-body">
 									        <div class="form-group mb-3">
-											    <label class="label" for="name">Genre ID <span style="color: red">*</span></label>
+											    <label class="label" for="name">Data ID <span style="color: red">*</span></label>
 											    <input type="text" class="form-control" placeholder="Genre ID" id="genre_id_modal" required>
 											</div>
 
@@ -348,12 +341,50 @@
 									    </div>
 									    <div class="modal-footer">
 									        <button type="button" class="btn btn-primary" onclick="updateGenre()">Save changes</button>
-									        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+									        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeGenreModal()">Close</button>
 									    </div>
 									</div>
 								</div>
 							</div>
 							<!--  End Update Genre Modal -->
+
+
+
+							<!--  Update Artist Modal -->
+							<div class="modal" tabindex="-1" role="dialog" id="updateartist">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+									    <div class="modal-header">
+									        <h5 class="modal-title">Update An Artist</h5>
+									        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									          <span aria-hidden="true">&times;</span>
+									        </button>
+									    </div>
+									    <div class="modal-body">
+									        <div class="form-group mb-3">
+											    <label class="label" for="name">Data ID <span style="color: red">*</span></label>
+											    <input type="text" class="form-control" placeholder="Artist ID" id="artist_id_modal" required>
+											</div>
+
+											<div class="form-group mb-3">
+											    <label class="label" for="name">Name <span style="color: red">*</span></label>
+											    <input type="text" class="form-control" placeholder="Artist Name" id="artist_name_modal" required>
+											</div>
+
+											<div class="form-group mb-3">
+											    <label class="label" for="name">Country <span style="color: red">*</span></label>
+											    <input type="text" class="form-control" placeholder="Artist Country" id="artist_country_modal" required>
+											</div>
+
+									    </div>
+									    <div class="modal-footer">
+									        <button type="button" class="btn btn-primary" onclick="updateArtist()">Save changes</button>
+									        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeArtistModal()">Close</button>
+									    </div>
+									</div>
+								</div>
+							</div>
+							<!--  End Update Artist Modal -->
 
 
 							 
@@ -374,6 +405,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 
 <script>
+
+	// Genre Management API Calls
 	function createGenre(){
 		const token = localStorage.getItem('token');
 		var genre_id=$("#genre_id").val()
@@ -410,16 +443,21 @@
 			return response.json()
 		})
 		.then(data => {
+			genreData=data
 			var rows="";
 		  	data.forEach(function(element, index) {
+		  		// Update the Table on genre page
 		  		var tr="<tr>"
 		  		tr+=`<td>${index}</td>`
 		  		tr+=`<td>${element.genre_id}</td>`
 		  		tr+=`<td>${element.name}</td>`
-		  		tr+=`<td><buton class="btn btn-success" data-id="${element._id}" onclick="loadgenremodal(\'${element.genre_id}\')">Update</button></td>`
-		  		tr+=`<td><buton class="btn btn-warning" data-id="${element._id}" onclick="deleteGenre(\'${element.genre_id}\')">Delete</button></td>`
+		  		tr+=`<td><buton class="btn btn-success" data-id="${element._id}" onclick="loadgenremodal(\'${element._id}\')">Update</button></td>`
+		  		tr+=`<td><buton class="btn btn-warning" data-id="${element._id}" onclick="deleteGenre(\'${element._id}\')">Delete</button></td>`
 		  		tr+="</tr>"
 		  		rows+=tr
+
+		  		// Update the Select on the artists pages
+
 			});
 			$("#genretable").html(rows)
 		});
@@ -431,10 +469,14 @@
 
 	}
 
+	function closeGenreModal(){
+		$('#updategenre').modal('hide');
+	}
+
 	function updateGenre(){
 		const token = localStorage.getItem('token');
 		var genre_id=$("#genre_id_modal").val()
-		var name=$("#genre_id_modal").val()
+		var name=$("#genre_name_modal").val()
 		
 		// Example of storing the JWT after login
 		fetch('http://localhost:3000/api/admin/deletegenre', {
@@ -478,6 +520,117 @@
 
 	// get the genres through the ap/admin/readgenres endpoint
 	readGenres();
+	// END Genre Management API Calls
+
+
+	// Artist Management API Calls
+	function createArtist(){
+		const token = localStorage.getItem('token');
+		var artist_id=$("#artist_id").val()
+		var name=$("#artist_name").val()
+		var country=$("#country").val()
+		// Example of storing the JWT after login
+		fetch('http://localhost:3000/api/admin/createartist', {
+		  mode: 'cors',
+		  method: 'POST',
+		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
+		  body: JSON.stringify({artist_id:artist_id,name:name,country:country})
+		})
+		.then(response => {
+			console.log(response)
+			return response.json()
+		})
+		.then(data => {
+			console.log(data)
+			location.href = "/dashboard";
+			$("#log").html("Artist Created Successfully")
+
+		});
+	}
+
+	function readArtists(){
+		const token = localStorage.getItem('token');
+		// Example of storing the JWT after login
+		fetch('http://localhost:3000/api/admin/readartists', {
+		  mode: 'cors',
+		  method: 'GET',
+		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`}
+		})
+		.then(response => {
+			console.log(response)
+			return response.json()
+		})
+		.then(data => {
+			var rows="";
+		  	data.forEach(function(element, index) {
+		  		var tr="<tr>"
+		  		tr+=`<td>${index}</td>`
+		  		tr+=`<td>${element.artist_id}</td>`
+		  		tr+=`<td>${element.name}</td>`
+		  		tr+=`<td><buton class="btn btn-success" data-id="${element._id}" onclick="loadartistmodal(\'${element._id}\')">Update</button></td>`
+		  		tr+=`<td><buton class="btn btn-warning" data-id="${element._id}" onclick="deleteArtist(\'${element._id}\')">Delete</button></td>`
+		  		tr+="</tr>"
+		  		rows+=tr
+			});
+			$("#artisttable").html(rows)
+		});
+	}
+
+	function loadartistmodal(genreid){
+		$('#artist_id_modal').val(genreid);
+		$('#updateartist').modal('show');
+
+	}
+
+	function closeArtistModal(){
+		$('#updateartist').modal('hide');
+	}
+
+	function updateArtist(){
+		const token = localStorage.getItem('token');
+		var artist_id=$("#artist_id_modal").val()
+		var name=$("#artist_name_modal").val()
+		var country=$("#artist_country_modal").val()
+		
+		// Example of storing the JWT after login
+		fetch('http://localhost:3000/api/admin/updateartist', {
+		  mode: 'cors',
+		  method: 'PUT',
+		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
+		  body: JSON.stringify({artist_id:artist_id,name:name,country: country})
+		})
+		.then(response => {
+			console.log(response)
+			return response.json()
+		})
+		.then(data => {
+			console.log(data)
+			location.href = "/dashboard";
+			$("#log").html("Artist Updated Successfully")
+		});
+	}
+
+	function deleteArtist(artist_id){
+		const token = localStorage.getItem('token');
+		
+		// Example of storing the JWT after login
+		fetch('http://localhost:3000/api/admin/deleteartist', {
+		  mode: 'cors',
+		  method: 'POST',
+		  headers: { 'Content-Type': 'application/json','x-access-token': `${token}`},
+		  body: JSON.stringify({genre_id:genre_id})
+		})
+		.then(response => {
+			console.log(response)
+			return response.json()
+		})
+		.then(data => {
+			console.log(data)
+			location.href = "/dashboard";
+			$("#log").html("Genre Deleted Successfully")
+		});
+	}
+
 
 
 </script>
